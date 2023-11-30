@@ -15,13 +15,22 @@
                     const clipboardContent = await navigator.clipboard.readText();
                     
                     // Extract the song ID from the Spotify link
-                    const match = clipboardContent.match(/track\/([a-zA-Z0-9]+)/);
+                    const match = clipboardContent.match(/(?:track|playlist)\/([a-zA-Z0-9]+)/);
                     
                     if (match && match[1]) {
                         // If a match is found, construct the embed link
                         const songID = match[1];
-                        const embedLinkTemplate = `https://open.spotify.com/embed/track/${songID}?utm_source=generator&theme=0`;
-                        document.getElementById('embed').src = embedLinkTemplate;
+                        const SongEmbed = `https://open.spotify.com/embed/track/${songID}?utm_source=generator&theme=0`;
+                        const PlaylistEmbed = `https://open.spotify.com/embed/playlist/${songID}?utm_source=generator&theme=0`;
+                        if(clipboardContent.includes('playlist'))
+                        {
+                            document.getElementById('embed').src = PlaylistEmbed;
+                        }
+                        else
+                        {
+                            document.getElementById('embed').src = SongEmbed;
+                        }
+
                     } else {
                         // Log an error if the clipboard content is not a valid Spotify link
                         console.error("Error! The content from the clipboard is not a valid Spotify link. Clipboard content: ", clipboardContent);
